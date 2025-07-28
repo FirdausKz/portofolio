@@ -1,15 +1,15 @@
 "use client"
 
+import React, { useState } from 'react'
+import { motion } from 'framer-motion'
 import { SiTailwindcss } from "react-icons/si";
 import { GrMysql } from "react-icons/gr";
 import { DiCodeigniter } from "react-icons/di";
 import { SiPhp } from "react-icons/si";
 import { FaDiscord } from "react-icons/fa";
 import { LiaCertificateSolid } from "react-icons/lia";
+import { FaGraduationCap } from "react-icons/fa";
 import { SiGooglegemini } from "react-icons/si";
-
-import React from 'react'
-import { motion } from 'framer-motion'
 import { 
   Github, 
   Mail, 
@@ -29,15 +29,114 @@ import {
   Award,
   User,
   MapPin,
-  Clock
+  Clock,
+  Star,
+  Send,
+  Check,
+  X
 } from 'lucide-react'
 import { Dither } from '@/components/ui/dither'
 import { RotatingText } from '@/components/ui/rotating-text'
-import { Timeline, TimelineEntry } from '@/components/ui/timeline'
 import { BlurText, BlurIn } from '@/components/ui/blur-text'
 import { Navigation } from '@/components/ui/navigation'
+import { Timeline, TimelineEntry } from '@/components/ui/timeline'
 
 export default function Home() {
+  const [showNotification, setShowNotification] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  })
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    try {
+      // Validate form data
+      if (!formData.name.trim() || !formData.email.trim() || !formData.subject.trim() || !formData.message.trim()) {
+        alert('Semua field harus diisi!')
+        return
+      }
+
+      console.log('Sending form data:', {
+        name: formData.name,
+        email: formData.email,
+        subject: formData.subject,
+        message: formData.message
+      })
+
+      // Using Web3Forms API with JSON format as per documentation
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: "df4e5411-b8e5-4cd2-bc17-50d9c172efa0",
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          subject: formData.subject.trim(),
+          message: formData.message.trim(),
+          from_name: "Portfolio Contact Form"
+        }),
+      })
+
+      console.log('Response status:', response.status)
+      
+      const result = await response.json()
+      console.log('API Response:', result)
+
+      if (result.success) {
+        setShowNotification(true)
+        setFormData({ name: '', email: '', subject: '', message: '' })
+        
+        setTimeout(() => {
+          setShowNotification(false)
+        }, 5000)
+        
+        console.log('Email sent successfully!')
+      } else {
+        throw new Error(result.message || 'Failed to send message')
+      }
+    } catch (error) {
+      console.error('Error sending message:', error)
+      
+      // More detailed error handling
+      let errorMessage = 'Gagal mengirim pesan. '
+      
+      if (error instanceof Error) {
+        if (error.message.includes('network') || error.message.includes('fetch')) {
+          errorMessage += 'Periksa koneksi internet Anda dan coba lagi.'
+        } else if (error.message.includes('Failed to fetch')) {
+          errorMessage += 'Tidak dapat terhubung ke server. Periksa koneksi internet.'
+        } else {
+          errorMessage += `Error: ${error.message}`
+        }
+      } else {
+        errorMessage += 'Terjadi kesalahan tidak dikenal.'
+      }
+      
+      errorMessage += '\n\nAtau hubungi langsung ke: firdauskhotibulzickrian@gmail.com'
+      
+      alert(errorMessage)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   const skills = [
     { 
       name: 'HTML5', 
@@ -118,25 +217,22 @@ export default function Home() {
   const projects = [
     {
       title: 'Machine Learning-Powered Diabetes Classification Application',
-      description: 'This web app classifies diabetes using patient input data (pregnancies, glucose, etc.). It leverages a backend machine learning model for analysis and predictions, showcasing intuitive UI development and predictive model integration.',
+      description: 'A web application that classifies diabetes using patient data (pregnancies, glucose levels, etc.). Built with machine learning models for accurate predictions and intuitive UI development.',
       technologies: ['Python', 'Streamlit',],
       link: 'https://diabetes-classificationn.streamlit.app/',
       image: '/images/diabetes.png'
     },
     {
       title: 'Dapur AI Bot - Automated Cooking Assistant',
-      description: 'Dapur AI Bot is a chatbot-based cooking assistant integrated with a member management system. It offers automated culinary tips, cooking time estimates, and calorie advice. Features include user management, message broadcasting, and keyword-triggered replies via a Telegram bot, all managed through a desktop interface.',
+      description: 'An intelligent chatbot cooking assistant with member management system. Features automated culinary tips, cooking estimates, calorie advice, and message broadcasting via Telegram bot.',
       technologies: ['Java', 'Netbeans', 'MySql', 'Gemini-API'],
       link: 'https://github.com/FirdausKz/Projek-Telegram-Bot-.git',
       image: '/images/bot.png'
     },
     {
       title: 'E-Commerce Admin Dashboard - Laptop Store',
-      description: [
-        'A modern e-commerce dashboard built using PHP CodeIgniter and Bootstrap, designed for both users and admin to manage product transactions seamlessly. The platform allows users to browse a catalog of laptops, add items to the cart, proceed to checkout, and view their transaction history. The system integrates with a shipping cost API to dynamically calculate total payment including delivery fees.',
-        
-      ],
-      technologies: ['PHP', 'CodeIgniter', 'Html', 'Bootsrap', 'MySql'],
+      description: 'Modern e-commerce dashboard built with PHP CodeIgniter and Bootstrap. Features user/admin management, product catalog, shopping cart, checkout system, and shipping cost API integration.',
+      technologies: ['PHP', 'CodeIgniter', 'Html', 'Bootsrap', 'MySql','API'],
       link: 'https://github.com/FirdausKz/belajar-ci',
       image: '/images/codeigniter.png'
     }
@@ -220,14 +316,12 @@ export default function Home() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white relative overflow-x-hidden">
+    <div className="min-h-screen bg-gray-950 text-white relative overflow-x-hidden">
       {/* Navigation */}
       <Navigation />
       
       {/* Background */}
-      <Dither
-      
-       />
+      <Dither />
       
       {/* Hero Section */}
       <section id="about" className="relative z-10 min-h-screen flex items-center justify-center px-4 py-24 overflow-hidden pt-28 md:pt-24">
@@ -265,7 +359,9 @@ export default function Home() {
           className="max-w-lg mx-auto lg:mx-0"
         >
           <BlurText
-            text="Combining the power of artificial intelligence and modern web technologies to create innovative, efficient, and human-centered solutions that address real-world challenges."
+            text="Hi, I'm a Computer Science student at Dian Nuswantoro University.
+I’m passionate about technology and its limitless potential to shape the future. Throughout my studies, I’ve explored coding, problem-solving, and building user-centered digital solutions.
+Currently, I’m diving deeper into Machine Learning, where I aim to combine creativity with data-driven intelligence to solve real-world challenges."
             className="text-base lg:text-lg text-gray-400 leading-relaxed"
             delay={0.8}
             duration={1.2}
@@ -312,7 +408,7 @@ export default function Home() {
 
       {/* Timeline Section */}
       <section id="myjourney" className="relative z-10 py-20 px-4 overflow-hidden">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -322,18 +418,115 @@ export default function Home() {
           >
             <BlurIn variant="blur-up" delay={0.2} duration={1.0}>
               <h2 className="text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                My Journey
+                My Journey & Education
               </h2>
             </BlurIn>
             <BlurText
-              text="From curious beginner to passionate developer - here's how my technical journey unfolded"
-              className="text-xl text-gray-400 max-w-2xl mx-auto"
+              text="From curious beginner to passionate developer - here's how my technical journey and educational background shaped me"
+              className="text-xl text-gray-400 max-w-3xl mx-auto"
               delay={0.5}
               duration={1.0}
             />
           </motion.div>
           
-          <Timeline data={timelineData} />
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+            {/* Left Side - Timeline */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <h3 className="text-2xl lg:text-3xl font-bold mb-8 text-center lg:text-left bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent flex items-center justify-center lg:justify-start gap-3">
+                <Briefcase className="w-8 h-8 text-blue-400" />
+                Professional Experience
+              </h3>
+              <Timeline data={timelineData} />
+            </motion.div>
+            
+            {/* Right Side - Education */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="space-y-6"
+            >
+               <h3 className="text-2xl lg:text-3xl font-bold mb-8 text-center lg:text-left bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent flex items-center justify-center lg:justify-start gap-3">
+                <FaGraduationCap className="w-8 h-8 text-cyan-400" />
+                Education
+              </h3>
+              
+              {/* Education Card */}
+              <div className="bg-gray-900/60 backdrop-blur-sm rounded-xl p-6 border border-blue-500/20 hover:border-cyan-400/40 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10">
+                <div className="flex items-start space-x-4">
+                  
+                  <div className="flex-1">
+                    <h4 className="text-xl font-bold text-white mb-2">
+                      Bachelor's in Computer Science
+                    </h4>
+                    <p className="text-cyan-400 font-semibold mb-2">
+                      Universitas Dian Nuswantoro
+                    </p>
+                    <p className="text-gray-400 mb-4">
+                      2023 - Present
+                    </p>
+                    <p className="text-gray-300 leading-relaxed">
+                      Currently pursuing a Bachelor's degree in Computer Science with a focus on software development and machine learning. 
+                      Active in programming labs, research projects, and tech communities while maintaining strong academic performance.
+                    </p>
+                    
+                    <div className="mt-4 p-3 bg-blue-600/10 rounded-lg border border-blue-500/20">
+                      <p className="text-cyan-400 font-semibold">
+                        GPA: 3.85 / 4.0
+                      </p>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+              
+              {/* Certificates Section */}
+              <div className="mt-8">
+                <h4 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                  <LiaCertificateSolid className="w-6 h-6 text-cyan-400" />
+                  Certificates & Achievements
+                </h4>
+                
+                <motion.a
+                  href="https://drive.google.com/drive/folders/1N1AAKywxIr3EQlqNuXqT1RThkfRie_LR?usp=sharing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="group relative block"
+                >
+                  <div className="bg-gray-900/60 backdrop-blur-sm rounded-xl p-6 border border-blue-500/20 hover:border-cyan-400/40 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10">
+                    <div className="flex items-center space-x-4">
+                      <div className="inline-flex p-3 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                        <LiaCertificateSolid className="w-8 h-8" />
+                      </div>
+                      
+                      <div className="flex-1">
+                        <h5 className="text-lg font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors duration-300">
+                          View My Certificates
+                        </h5>
+                        <p className="text-gray-400 text-sm leading-relaxed">
+                          Access my complete collection of professional certificates, course completions, and achievement badges.
+                        </p>
+                        
+                        <div className="flex items-center space-x-2 mt-3 text-cyan-400 group-hover:text-cyan-300 transition-colors">
+                          <span className="font-medium text-sm">Open Drive Folder</span>
+                          <ExternalLink className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </motion.a>
+              </div>
+              
+            </motion.div>
+          </div>
         </div>
       </section>
 
@@ -371,7 +564,7 @@ export default function Home() {
                 whileHover={{ y: -10, scale: 1.05 }}
                 className="group"
               >
-                <div className="bg-gray-800/40 backdrop-blur-sm rounded-xl p-6 border border-blue-500/30 hover:border-cyan-400/60 transition-all duration-300 text-center hover:shadow-lg hover:shadow-blue-500/20">
+                <div className="bg-gray-900/60 backdrop-blur-sm rounded-xl p-6 border border-blue-500/20 hover:border-cyan-400/40 transition-all duration-300 text-center hover:shadow-lg hover:shadow-blue-500/10">
                   <div className={`inline-flex p-3 rounded-lg bg-gradient-to-r ${skill.color} mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                     {skill.icon}
                   </div>
@@ -384,8 +577,8 @@ export default function Home() {
       </section>
 
       {/* Projects Section */}
-      <section className="relative z-10 py-20 px-4 overflow-hidden">
-        <div className="max-w-6xl mx-auto">
+      <section id="Projectfield" className="relative z-10 py-20 px-4 overflow-hidden">
+        <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -394,7 +587,7 @@ export default function Home() {
             className="text-center mb-16"
           >
             <BlurIn variant="blur-left" delay={0.2} duration={1.0}>
-              <h2 id="Projectfield" className="text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
                 Featured Projects
               </h2>
             </BlurIn>
@@ -406,7 +599,7 @@ export default function Home() {
             />
           </motion.div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mx-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project, index) => (
               <motion.div
                 key={project.title}
@@ -415,29 +608,30 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -10 }}
-                className="group"
+                className="group h-full"
               >
-                <div className="bg-gray-800/40 backdrop-blur-sm rounded-xl overflow-hidden border border-blue-500/30 hover:border-cyan-400/60 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20">
+                <div className="bg-gray-900/60 backdrop-blur-sm rounded-xl overflow-hidden border border-blue-500/20 hover:border-cyan-400/40 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10 h-full flex flex-col">
                   <div className="aspect-video bg-gradient-to-br from-blue-900/30 to-cyan-900/30 flex items-center justify-center relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-cyan-500/10"></div>
                     <img 
                       src={project.image} 
                       alt={project.title}
-                      className="w-full h-full object-cover relative z-1"
+                      className="w-full h-full object-cover relative z-1 transition-transform duration-300 group-hover:scale-105"
                     />
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300"></div>
                   </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                  <div className="p-6 flex-1 flex flex-col">
+                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-cyan-300 transition-colors">
                       {project.title}
                     </h3>
-                    <p className="text-gray-400 mb-4 leading-relaxed">
+                    <p className="text-gray-400 mb-4 leading-relaxed text-sm flex-1">
                       {project.description}
                     </p>
                     <div className="flex flex-wrap gap-2 mb-4">
                       {project.technologies.map((tech) => (
                         <span
                           key={tech}
-                          className="px-3 py-1 bg-blue-600/20 text-blue-300 rounded-full text-sm border border-blue-500/30 hover:bg-blue-500/20 transition-colors"
+                          className="px-3 py-1 bg-blue-600/20 text-blue-300 rounded-full text-xs border border-blue-500/30 hover:bg-blue-500/20 transition-colors font-medium"
                         >
                           {tech}
                         </span>
@@ -447,7 +641,7 @@ export default function Home() {
                       href={project.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center space-x-2 text-cyan-400 hover:text-cyan-300 transition-colors group/link"
+                      className="inline-flex items-center space-x-2 text-cyan-400 hover:text-cyan-300 transition-colors group/link font-semibold"
                     >
                       <span>View Project</span>
                       <ExternalLink className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
@@ -460,161 +654,215 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Certificates Section */}
-      <section id="certificates" className="relative z-10 py-20 px-4 overflow-hidden ">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <BlurIn variant="blur-up" delay={0.2} duration={1.0}>
-              <h2 className="text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                Certificates & Achievements
-              </h2>
-            </BlurIn>
-            <BlurText
-              text="Professional certifications and achievements that showcase my learning journey"
-              className="text-xl text-gray-400 max-w-2xl mx-auto"
-              delay={0.5}
-              duration={1.0}
-            />
-          </motion.div>
-          
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="flex justify-center"
-          >
-            <motion.a
-              href="https://drive.google.com/drive/folders/1N1AAKywxIr3EQlqNuXqT1RThkfRie_LR?usp=sharing"
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ scale: 1.05, y: -5 }}
-              whileTap={{ scale: 0.95 }}
-              className="group relative"
-            >
-              <div className="bg-gray-800/40 backdrop-blur-sm rounded-xl p-8 border border-blue-500/30 hover:border-cyan-400/60 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 text-center min-w-[300px]">
-                {/* Google Drive Icon */}
-                <div className="inline-flex p-4 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                  <LiaCertificateSolid className="w-12 h-12" />
-                </div>
-                
-                <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-cyan-300 transition-colors duration-300">
-                  View My Certificates
-                </h3>
-                
-                <p className="text-gray-400 mb-6 leading-relaxed">
-                  Access my complete collection of professional certificates, course completions, and achievement badges in one organized Google Drive folder.
-                </p>
-                
-                <div className="flex items-center justify-center space-x-2 text-cyan-400 group-hover:text-cyan-300 transition-colors">
-                  <span className="font-semibold">Open Drive Folder</span>
-                  <ExternalLink className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </div>
-                
-                {/* Decorative badges */}
-                <div className="flex justify-center space-x-2 mt-4">
-                  <div className="px-3 py-1 bg-green-600/20 text-green-300 rounded-full text-sm border border-green-500/30">
-                    <Award className="w-4 h-4 inline mr-1" />
-                    Verified
-                  </div>
-                  <div className="px-3 py-1 bg-blue-600/20 text-blue-300 rounded-full text-sm border border-blue-500/30">
-                    <GraduationCap className="w-4 h-4 inline mr-1" />
-                    Updated
-                  </div>
-                </div>
-              </div>
-              
-              {/* Hover effect overlay */}
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-            </motion.a>
-          </motion.div>
-          
-          {/* Certificate categories preview */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 mx-10"
-          >
-            <div className="bg-gray-800/30 backdrop-blur-sm rounded-lg p-5 border border-blue-500/20 text-center">
-              <Code className="w-8 h-8 text-blue-400 mx-auto mb-3" />
-              <h4 className="text-lg font-semibold text-white mb-2">Programming</h4>
-              <p className="text-gray-400 text-sm">Web Development, Mobile Apps, Backend</p>
-            </div>
-            
-            <div className="bg-gray-800/30 backdrop-blur-sm rounded-lg p-6 border border-blue-500/20 text-center">
-              <Database className="w-8 h-8 text-cyan-400 mx-auto mb-3" />
-              <h4 className="text-lg font-semibold text-white mb-2">Machine Learning</h4>
-              <p className="text-gray-400 text-sm">AI, Deep Learning, Data Science</p>
-            </div>
-            
-            <div className="bg-gray-800/30 backdrop-blur-sm rounded-lg p-6 border border-blue-500/20 text-center">
-              <Globe className="w-8 h-8 text-green-400 mx-auto mb-3" />
-              <h4 className="text-lg font-semibold text-white mb-2">Professional</h4>
-              <p className="text-gray-400 text-sm">Workshops, Conferences, Training</p>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
       {/* Contact Section */}
-      <section id="contact" className="relative z-10 py-20 px-4 overflow-hidden">
-        <div className="max-w-4xl mx-auto text-center">
+      <section id="contact" className="relative z-10 py-16 md:py-20 px-4 overflow-hidden">
+        <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="mb-16"
+            className="text-center mb-12 md:mb-16"
           >
             <BlurIn variant="blur-down" delay={0.2} duration={1.0}>
-              <h2 id="contact" className="text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                You can contact me
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent px-4">
+                Get In Touch
               </h2>
             </BlurIn>
             <BlurText
               text="Let's connect and discuss opportunities, collaborations, or just have a chat about technology"
-              className="text-xl text-gray-400 max-w-2xl mx-auto"
+              className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto px-4"
               delay={0.5}
               duration={1.0}
             />
           </motion.div>
           
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="flex flex-wrap justify-center gap-4"
-          >
-            {socialLinks.map((link, index) => (
-              <motion.a
-                key={link.name}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                className={`flex items-center space-x-3 px-6 py-3 bg-gray-800/40 backdrop-blur-sm rounded-xl border border-blue-500/30 hover:border-cyan-400/60 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 ${link.color}`}
-              >
-                {link.icon}
-                <span className="font-medium">{link.name}</span>
-              </motion.a>
-            ))}
-          </motion.div>
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start max-w-6xl mx-auto">
+            {/* Left Side - Contact Form */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="w-full"
+            >
+              <div className="bg-gray-900/60 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-blue-500/20 mr-1000 hover:border-cyan-400/40 transition-all duration-300 w-full max-w-2xl mx-auto lg:max-w-none lg:mx-0 lg:mr-4">
+                <div className="flex items-center gap-3 mb-6">
+                  <Send className="w-6 h-6 text-cyan-400" />
+                  <h3 className="text-xl md:text-2xl font-bold text-white">Send a Message</h3>
+                </div>
+                
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        placeholder="Your name"
+                        required
+                        className="w-full px-4 py-3 bg-gray-950/70 border border-blue-500/20 rounded-lg text-white placeholder-gray-400 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300 outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        placeholder="email@example.com"
+                        required
+                        className="w-full px-4 py-3 bg-gray-950/70 border border-blue-500/20 rounded-lg text-white placeholder-gray-400 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300 outline-none"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="subject" className="block text-sm font-medium text-gray-300 mb-2">
+                      Subject
+                    </label>
+                    <input
+                      type="text"
+                      id="subject"
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleInputChange}
+                      placeholder="Project collaboration, question, or just hello"
+                      required
+                      className="w-full px-4 py-3 bg-gray-950/70 border border-blue-500/20 rounded-lg text-white placeholder-gray-400 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300 outline-none"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
+                      Message
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      rows={6}
+                      placeholder="Tell me about your project, ideas, or anything you'd like to discuss..."
+                      required
+                      className="w-full px-4 py-3 bg-gray-950/70 border border-blue-500/20 rounded-lg text-white placeholder-gray-400 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300 outline-none resize-none"
+                    ></textarea>
+                  </div>
+                  
+                  <motion.button
+                    type="submit"
+                    disabled={isSubmitting}
+                    whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+                    whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+                    className={`w-full flex items-center justify-center gap-2 px-6 md:px-8 py-3 rounded-lg font-semibold text-white transition-all duration-300 transform hover:shadow-lg text-sm md:text-base ${
+                      isSubmitting 
+                        ? 'bg-gray-600 cursor-not-allowed' 
+                        : 'bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 hover:shadow-blue-500/25'
+                    }`}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-5 h-5" />
+                        Send Message
+                      </>
+                    )}
+                  </motion.button>
+                </form>
+              </div>
+            </motion.div>
+            
+            {/* Right Side - Social Links */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="w-full"
+            >
+              <div className="bg-gray-900/60 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-blue-500/20 hover:border-cyan-400/40 transition-all duration-300 w-full max-w-2xl mx-auto lg:max-w-none lg:mx-0 lg:ml-4">
+                <h3 className="text-xl md:text-2xl font-bold text-white mb-6 text-center lg:text-left">Connect With Me</h3>
+                
+                <div className="space-y-4">
+                  {socialLinks.map((link, index) => (
+                    <motion.a
+                      key={link.name}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      viewport={{ once: true }}
+                      whileHover={{ scale: 1.02, x: 5 }}
+                      whileTap={{ scale: 0.98 }}
+                      className={`flex items-center space-x-4 p-4 bg-gray-900/30 backdrop-blur-sm rounded-xl border border-blue-500/30 hover:border-cyan-400/60 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 ${link.color} group`}
+                    >
+                      <div className="w-12 h-12 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500/20 to-cyan-500/20 group-hover:from-blue-500/30 group-hover:to-cyan-500/30 transition-all duration-300">
+                        {link.icon}
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-white group-hover:text-cyan-300 transition-colors">
+                          {link.name}
+                        </h4>
+                        <p className="text-sm text-gray-400">
+                          {link.name === 'GitHub' && '@firdauskz'}
+                          {link.name === 'Gmail' && 'firdauskhotibulzickrian@gmail.com'}
+                          {link.name === 'Instagram' && '@zickriann'}
+                          {link.name === 'LinkedIn' && 'Firdaus Khotibul Zickrian'}
+                          {link.name === 'Discord' && 'zickrian'}
+                        </p>
+                      </div>
+                      <ExternalLink className="w-5 h-5 text-gray-400 group-hover:text-cyan-300 group-hover:translate-x-1 transition-all duration-300" />
+                    </motion.a>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
+
+      {/* Success Notification Popup */}
+      {showNotification && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8, y: 50 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.8, y: 50 }}
+          className="fixed bottom-6 right-6 z-50"
+        >
+          <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-4 rounded-xl shadow-2xl shadow-green-500/25 border border-green-400/30 backdrop-blur-sm">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                <Check className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="font-semibold text-lg">Message Sent Successfully!</h4>
+                <p className="text-green-100 text-sm">Thank you for reaching out. I'll get back to you soon!</p>
+              </div>
+              <button
+                onClick={() => setShowNotification(false)}
+                className="text-white/80 hover:text-white transition-colors ml-2"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       
     </div>

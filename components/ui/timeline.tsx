@@ -79,7 +79,7 @@ export const Timeline: React.FC<TimelineProps> = ({ data, className = "" }) => {
           {/* Content */}
           <div className="flex-1 min-w-0">
             <motion.div
-              className="bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-blue-500/20 hover:border-blue-400/40 transition-all duration-300"
+              className="bg-gray-900/60 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-blue-500/20 hover:border-blue-400/40 transition-all duration-300"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               whileHover={{ 
