@@ -665,35 +665,35 @@ Currently, I’m diving deeper into Machine Learning, where I aim to combine cre
             className="text-center mb-12 md:mb-16"
           >
             <BlurIn variant="blur-down" delay={0.2} duration={1.0}>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent px-4">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent px-2 sm:px-4">
                 Get In Touch
               </h2>
             </BlurIn>
             <BlurText
               text="Let's connect and discuss opportunities, collaborations, or just have a chat about technology"
-              className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto px-4"
+              className="text-base sm:text-lg md:text-xl text-gray-400 max-w-2xl mx-auto px-2 sm:px-4"
               delay={0.5}
               duration={1.0}
             />
           </motion.div>
           
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-stretch max-w-6xl mx-auto px-2 sm:px-4">
             {/* Left Side - Contact Form */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
-              className="w-full"
+              className="w-full flex justify-center lg:justify-start"
             >
-              <div className="bg-gray-900/60 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-blue-500/20 mr-1000 hover:border-cyan-400/40 transition-all duration-300 w-full max-w-2xl mx-auto lg:max-w-none lg:mx-0 lg:mr-4">
-                <div className="flex items-center gap-3 mb-6">
-                  <Send className="w-6 h-6 text-cyan-400" />
-                  <h3 className="text-xl md:text-2xl font-bold text-white">Send a Message</h3>
+              <div className="bg-gray-900/60 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-blue-500/20 hover:border-cyan-400/40 transition-all duration-300 w-full max-w-sm sm:max-w-2xl mx-auto lg:max-w-none lg:mx-0 h-full flex flex-col">
+                <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+                  <Send className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400" />
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white">Send a Message</h3>
                 </div>
                 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 flex-1">
+                  <div className="grid grid-cols-1 gap-4">
                     <div>
                       <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
                         Name
@@ -706,7 +706,7 @@ Currently, I’m diving deeper into Machine Learning, where I aim to combine cre
                         onChange={handleInputChange}
                         placeholder="Your name"
                         required
-                        className="w-full px-4 py-3 bg-gray-950/70 border border-blue-500/20 rounded-lg text-white placeholder-gray-400 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300 outline-none"
+                        className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-950/70 border border-blue-500/20 rounded-lg text-white placeholder-gray-400 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300 outline-none text-sm sm:text-base"
                       />
                     </div>
                     <div>
@@ -721,7 +721,7 @@ Currently, I’m diving deeper into Machine Learning, where I aim to combine cre
                         onChange={handleInputChange}
                         placeholder="email@example.com"
                         required
-                        className="w-full px-4 py-3 bg-gray-950/70 border border-blue-500/20 rounded-lg text-white placeholder-gray-400 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300 outline-none"
+                        className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-950/70 border border-blue-500/20 rounded-lg text-white placeholder-gray-400 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300 outline-none text-sm sm:text-base"
                       />
                     </div>
                   </div>
@@ -738,7 +738,7 @@ Currently, I’m diving deeper into Machine Learning, where I aim to combine cre
                       onChange={handleInputChange}
                       placeholder="Project collaboration, question, or just hello"
                       required
-                      className="w-full px-4 py-3 bg-gray-950/70 border border-blue-500/20 rounded-lg text-white placeholder-gray-400 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300 outline-none"
+                      className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-950/70 border border-blue-500/20 rounded-lg text-white placeholder-gray-400 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300 outline-none text-sm sm:text-base"
                     />
                   </div>
                   
@@ -751,10 +751,10 @@ Currently, I’m diving deeper into Machine Learning, where I aim to combine cre
                       name="message"
                       value={formData.message}
                       onChange={handleInputChange}
-                      rows={6}
+                      rows={5}
                       placeholder="Tell me about your project, ideas, or anything you'd like to discuss..."
                       required
-                      className="w-full px-4 py-3 bg-gray-950/70 border border-blue-500/20 rounded-lg text-white placeholder-gray-400 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300 outline-none resize-none"
+                      className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-950/70 border border-blue-500/20 rounded-lg text-white placeholder-gray-400 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300 outline-none resize-none text-sm sm:text-base"
                     ></textarea>
                   </div>
                   
@@ -763,7 +763,7 @@ Currently, I’m diving deeper into Machine Learning, where I aim to combine cre
                     disabled={isSubmitting}
                     whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
                     whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
-                    className={`w-full flex items-center justify-center gap-2 px-6 md:px-8 py-3 rounded-lg font-semibold text-white transition-all duration-300 transform hover:shadow-lg text-sm md:text-base ${
+                    className={`w-full flex items-center justify-center gap-2 px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 rounded-lg font-semibold text-white transition-all duration-300 transform hover:shadow-lg text-sm sm:text-base ${
                       isSubmitting 
                         ? 'bg-gray-600 cursor-not-allowed' 
                         : 'bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 hover:shadow-blue-500/25'
@@ -791,12 +791,12 @@ Currently, I’m diving deeper into Machine Learning, where I aim to combine cre
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               viewport={{ once: true }}
-              className="w-full"
+              className="w-full flex justify-center lg:justify-end"
             >
-              <div className="bg-gray-900/60 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-blue-500/20 hover:border-cyan-400/40 transition-all duration-300 w-full max-w-2xl mx-auto lg:max-w-none lg:mx-0 lg:ml-4">
-                <h3 className="text-xl md:text-2xl font-bold text-white mb-6 text-center lg:text-left">Connect With Me</h3>
+              <div className="bg-gray-900/60 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-blue-500/20 hover:border-cyan-400/40 transition-all duration-300 w-full max-w-sm sm:max-w-2xl mx-auto lg:max-w-none lg:mx-0 h-full flex flex-col">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-4 sm:mb-6 text-center lg:text-left">Connect With Me</h3>
                 
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4 flex-1">
                   {socialLinks.map((link, index) => (
                     <motion.a
                       key={link.name}
@@ -809,16 +809,16 @@ Currently, I’m diving deeper into Machine Learning, where I aim to combine cre
                       viewport={{ once: true }}
                       whileHover={{ scale: 1.02, x: 5 }}
                       whileTap={{ scale: 0.98 }}
-                      className={`flex items-center space-x-4 p-4 bg-gray-900/30 backdrop-blur-sm rounded-xl border border-blue-500/30 hover:border-cyan-400/60 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 ${link.color} group`}
+                      className={`flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 bg-gray-900/30 backdrop-blur-sm rounded-xl border border-blue-500/30 hover:border-cyan-400/60 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 ${link.color} group`}
                     >
-                      <div className="w-12 h-12 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500/20 to-cyan-500/20 group-hover:from-blue-500/30 group-hover:to-cyan-500/30 transition-all duration-300">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500/20 to-cyan-500/20 group-hover:from-blue-500/30 group-hover:to-cyan-500/30 transition-all duration-300">
                         {link.icon}
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-semibold text-white group-hover:text-cyan-300 transition-colors">
+                        <h4 className="font-semibold text-white group-hover:text-cyan-300 transition-colors text-sm sm:text-base">
                           {link.name}
                         </h4>
-                        <p className="text-sm text-gray-400">
+                        <p className="text-xs sm:text-sm text-gray-400">
                           {link.name === 'GitHub' && '@firdauskz'}
                           {link.name === 'Gmail' && 'firdauskhotibulzickrian@gmail.com'}
                           {link.name === 'Instagram' && '@zickriann'}
@@ -826,7 +826,7 @@ Currently, I’m diving deeper into Machine Learning, where I aim to combine cre
                           {link.name === 'Discord' && 'zickrian'}
                         </p>
                       </div>
-                      <ExternalLink className="w-5 h-5 text-gray-400 group-hover:text-cyan-300 group-hover:translate-x-1 transition-all duration-300" />
+                      <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:text-cyan-300 group-hover:translate-x-1 transition-all duration-300" />
                     </motion.a>
                   ))}
                 </div>
