@@ -136,7 +136,7 @@ export function Navigation({ className = "" }: NavigationProps) {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="fixed top-6 right-6 z-50 md:hidden bg-white/10 backdrop-blur-2xl border border-white/20 rounded-full p-3 shadow-2xl shadow-white/10"
+        className="fixed top-6 right-6 z-50 md:hidden bg-white/10  border border-white/20 rounded-2xl p-3 shadow-2xl "
       >
         <motion.div
           animate={{ rotate: isMobileMenuOpen ? 180 : 0 }}
@@ -165,7 +165,7 @@ export function Navigation({ className = "" }: NavigationProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-black/40"
+              className="absolute inset-0"
               onClick={() => setIsMobileMenuOpen(false)}
             />
             
@@ -175,7 +175,7 @@ export function Navigation({ className = "" }: NavigationProps) {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -50, scale: 0.95 }}
               transition={{ type: "spring", damping: 25, stiffness: 400 }}
-              className="absolute top-16 left-4 right-4 bg-white/[0.08] backdrop-blur-3xl border border-white/[0.12] rounded-3xl shadow-2xl shadow-black/25 overflow-hidden"
+              className="absolute top-20 left-4 right-4 bg-white/[0.08] backdrop-blur-3xl border border-white/[0.12] rounded-3xl shadow-2xl shadow-black/25 overflow-hidden"
               style={{
                 backdropFilter: 'blur(40px) saturate(180%)',
                 WebkitBackdropFilter: 'blur(40px) saturate(180%)',

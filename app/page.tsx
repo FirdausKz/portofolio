@@ -53,7 +53,7 @@ export default function Home() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
-    setFormData(prev => ({
+    setFormData((prev: typeof formData) => ({
       ...prev,
       [name]: value
     }))
@@ -343,10 +343,10 @@ export default function Home() {
         <BlurIn variant="blur-left" delay={0.4} duration={1.0}>
           <div className="text-lg sm:text-xl lg:text-2xl text-gray-300 space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-center lg:justify-start space-y-2 sm:space-y-0 sm:space-x-2">
-              <span>specialized in</span>
+              <span>Enthusiast in</span>
               <RotatingText
-                texts={["Machine Learning Enthusiast", "Web Developer"]}
-                className="text-xl sm:text-2xl font-bold text-blue-400"
+                texts={["Machine Learning", "Web Developer"]}
+                className="text-xl sm:text-lg font-bold text-blue-400"
               />
             </div>
           </div>
